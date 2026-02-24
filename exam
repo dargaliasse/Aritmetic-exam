@@ -1,0 +1,54 @@
+import random
+from random import randrange
+
+def first_step():
+
+    def task_generation():
+        number1 = str(randrange(2, 10))
+        number2 = str(randrange(2, 10))
+        operator = random.choice("+-*")
+        print(f"{number1} {operator} {number2}")
+        return number1, number2, operator
+
+    def addition(n1, n2):
+        return int(n1) + int(n2)
+
+    def substraction(n1, n2):
+        return int(n1) - int(n2)
+
+    def multiplication(n1, n2):
+        return int(n1) * int(n2)
+
+    def calculation(n1, n2, operator):
+        if operator == "+":
+            result = addition(int(n1), int(n2))
+        elif operator == "-":
+            result = substraction(int(n1), int(n2))
+        elif operator == "*":
+            result = multiplication(int(n1), int(n2))
+        return result
+
+    def exam():
+        score = 0
+        for _ in range(5):
+            n1, n2, operator = task_generation()
+            result = calculation(n1, n2, operator)
+
+            while True:
+                try:
+                    user_input = int(input())
+                    break
+                except ValueError:
+                    print("Incorrect format")
+
+            if user_input == result:
+                print("Right!")
+                score += 1
+            else:
+                print("Wrong!")
+
+        print(f"Your mark is {score}/5")
+
+    exam()
+
+first_step()
