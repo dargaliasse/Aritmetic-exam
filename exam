@@ -1,14 +1,34 @@
 import random
 from random import randrange
+import sys
 
 def first_step():
 
-    def task_generation():
+    def simple_operation_generation():
         number1 = str(randrange(2, 10))
         number2 = str(randrange(2, 10))
         operator = random.choice("+-*")
         print(f"{number1} {operator} {number2}")
         return number1, number2, operator
+
+    def integral_square_generation():
+        number = randrange(11, 30)
+        print(number)
+        return number
+
+    def task_choice():
+        while True:
+            difficulty = input("""Which level do you want? Enter a number:
+1 - simple operations with numbers 2-9
+2 - integral squares of 11-29
+""")
+            if difficulty not in ("1", "2"):
+                print("Incorrect format.")
+            else:
+                return difficulty
+
+    def integral_square(n):
+        return n * n
 
     def addition(n1, n2):
         return int(n1) + int(n2)
@@ -28,27 +48,65 @@ def first_step():
             result = multiplication(int(n1), int(n2))
         return result
 
+    def save_result(score, difficulty):
+        print("Would you like to save your result to the file? Enter yes or no.")
+        save = input().strip()
+        if save.lower() in ("yes", "y"):
+            username = input("What is your name? ").strip()
+            if difficulty == "1":
+                level_desc = "simple operations with numbers 2-9"
+            else:
+                level_desc = "integral squares of 11-29"
+
+            with open("results.txt", "a", encoding="utf-8") as results:
+                results.write(f"{username}: {score}/5 in level {difficulty} ({level_desc}).\n")
+            print('The results are saved in "results.txt".')
+
     def exam():
         score = 0
-        for _ in range(5):
-            n1, n2, operator = task_generation()
-            result = calculation(n1, n2, operator)
+        difficulty = task_choice()
 
-            while True:
-                try:
-                    user_input = int(input())
-                    break
-                except ValueError:
-                    print("Incorrect format")
+        if difficulty == "1":
+            for _ in range(5):
+                n1, n2, operator = simple_operation_generation()
+                result = calculation(n1, n2, operator)
 
-            if user_input == result:
-                print("Right!")
-                score += 1
-            else:
-                print("Wrong!")
+                while True:
+                    try:
+                        user_input = int(input())
+                        break
+                    except ValueError:
+                        print("Incorrect format.")
 
-        print(f"Your mark is {score}/5")
+                if user_input == result:
+                    print("Right!")
+                    score += 1
+                else:
+                    print("Wrong!")
+
+        elif difficulty == "2":
+            for _ in range(5):
+                n = integral_square_generation()
+                result = integral_square(n)
+
+                while True:
+                    try:
+                        user_input = int(input())
+                        break
+                    except ValueError:
+                        print("Incorrect format.")
+
+                if user_input == result:
+                    print("Right!")
+                    score += 1
+                else:
+                    print("Wrong!")
+
+        print(f"Your mark is {score}/5.")
+        save_result(score, difficulty)
 
     exam()
 
 first_step()
+
+
